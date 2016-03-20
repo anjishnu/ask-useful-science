@@ -9,7 +9,7 @@ import useful_science
 
 def lambda_handler(request_obj, context={}):
     ''' All requests start here '''    
-    return alexa.route_request(request)
+    return alexa.route_request(request_obj)
 
 
 @alexa.default_handler()
@@ -36,8 +36,10 @@ def session_ended_request_handler(request):
 def get_posts_intent_handler(request):    
 
     def resolve_slots(text):
-        return text.lower()
-
+        if text in useful_science.categories:
+            return text        
+        return 'new'
+    
     category_text = request.slots['Category']
     category = resolve_slots(category_text)
     post = useful_science.post_cache.get_post(category)
