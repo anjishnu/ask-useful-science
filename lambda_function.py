@@ -20,17 +20,15 @@ def default_handler(request):
 
 @alexa.request_handler("LaunchRequest")
 def launch_request_handler(request):
-    return alexa.create_response(message="Welcome to Useful Science. We summarize complicated"
+    return alexa.create_response(message="Welcome to Useful Science. We summarize complicated "
                                  "scientific publications in easy to understand forms!",
-                                 reprompt='What would you like to know more about?'
+                                 reprompt_message='What would you like to know more about? '
                                  'You can ask for the latest posts or posts about a particular topic')
 
 
 @alexa.request_handler(request_type="SessionEndedRequest")
 def session_ended_request_handler(request):
     return alexa.create_response(message="Goodbye!")
-
-
 
 @alexa.intent_handler('GetPosts')
 def get_posts_intent_handler(request):    
@@ -61,12 +59,12 @@ def help_intent_handler(request):
     cat_list = [cat for cat in useful_science.categories]
     pre = cat_list[:-1]
     post = cat_list[-1:]
-    formatted = " ".join(map(lambda x : x+",") + ['and'] + post)
+    formatted = " ".join(map(lambda x : x+",", pre) + ['and'] + post)
     message = ["You can ask for posts in the following categories - ",
                formatted]          
-    return alexa.create_response(message=message)
+    return alexa.create_response(message=' '.join(message))
 
                                  
 @alexa.intent_handler('AMAZON.StopIntent')
 def stop_intent_handler(request):
-    return session_ended_request_handler(request)
+    return alexa.create_response(message="Goodbye!")
